@@ -1,119 +1,54 @@
-# Create-and-Mint-Token-Metacrafters
-A smart contract that  allows contract owner to mint tokens to a provided address and any user is able to burn and transfer token, made for Eth + Avax Intermediate Assesment 3 on the Metacrafters learning platform.
+# MyToken
+
+## Overview
+
+MyToken (MYT) is an ERC20 token smart contract deployed on the Ethereum blockchain. It allows for token minting (admin-only), burning, and transfers, giving the admin full control over the minting function.
 
 ## Description
 
-This program is a simple contract written in Solidity, a programming language used for developing smart contracts on the Ethereum blockchain. The contract has
-the following functions :-
+MyToken is a Solidity-based smart contract that extends the OpenZeppelin ERC20 implementation. It provides basic token functionality, where the initial supply is minted to the contract creator (admin). The contract admin, set upon deployment, has exclusive rights to mint new tokens to designated addresses. Any user can burn their tokens or transfer them using standard ERC20 methods.
 
-(1) Public variables that store the details of my Spydiecy coin.
+# Getting Started
 
-(2) A mapping of addresses to balance.
+## Deploying the Contract
 
-(3) A mint function that takes two parameters: an address and a amount. The function then increases the total supply by that number and increases the balance of the address provided by the owner by the amount specified (only accessible by the owner address).
+### Setup
 
-(4) A burn function, which works the opposite of the mint function, as it will destroy tokens , burn function has conditionals to make sure the balance of account is greater than or equal to the amount that is supposed to be burned ( accessible by both users and owner).
+1. **Environment Setup**: Ensure you have an Ethereum development environment set up, such as Remix or Truffle.
+2. **Create Contract File**: Copy the contract code into a file named `MyToken.sol`.
 
-(5) Lastly, transfer function which lets the user interacting with the contract to transfer tokens from one address to another ( accessible by both users and owner).
+### Compiling and Deploying
 
-## Getting Started
+1. **Compile the Contract**: Use your preferred Solidity compiler (e.g., Remix).
+2. **Deploy the Contract**: Deploy the contract to your desired Ethereum network (e.g., Rinkeby, Goerli).
 
-### Functionalities
+## Interacting with the Contract
 
-Using the 'mintTokens' function you can enter the amount of tokens the owner wants to add to a specified address (only Owner).
+Once deployed, interact with the contract using Ethereum wallets or through scripting:
 
-Using the 'burnToken' function you can enter the number of tokens you want to remove from your balance (both user and Owner).
+- **Minting Tokens**: Only the contract owner can mint tokens using the `mint` function.
+  Example: `mint("0xRecipientAddress", 1000)`
 
-Using the 'transferTokens' function you can enter the wallet address you want to send tokens to and addd the number of tokens you want to send from your balance (both user and Owner).
+- **Burning Tokens**: Any token holder can burn their tokens using the `burn` function.
+  Example: `burn(100)`
 
-The 'balance' button is a mapping of the address and the amount of tokens that address contains.
+- **Transferring Tokens**: Transfer tokens between addresses using standard ERC20 transfer methods.
+  Example: `transferFrom("0xFromAddress", "0xToAddress", 100)`
 
-Using 'TokenAbbre' you can get the abbreviation of the token's name.
+## Help
 
-Using 'TokenName' you can know the name of the token.
+### Common Issues
 
-Using 'TokenTotalSupply' you can know the total amount of tokens present.
+- **Ownership Verification**: Ensure only the contract owner can execute minting functions by verifying ownership.
 
-Using 'TokenDecimals' you can know the total amount of decimal places present.
+### Command for Help
 
-Using 'Owner' you can know the address of the owner.
-
-
-### Executing program
-
-To run this program, you can use Remix, an online Solidity IDE. To get started, go to the Remix website at https://remix.ethereum.org/.
-
-Once you are on the Remix website, create a new file by clicking on the "+" icon in the left-hand sidebar. Save the file with a .sol extension (e.g., HelloWorld.sol). Copy and paste the code from contract.sol file into your file:
-
-To compile the code, click on the "Solidity Compiler" tab in the left-hand sidebar. Make sure the "Compiler" option is set to latest solidity version (or another compatible version), and then click on the "Compile" button.
-
-Once the code is compiled, you can deploy the contract by clicking on the "Deploy & Run Transactions" tab in the left-hand sidebar. Select the your contract from the dropdown menu, and then click on the "Deploy" button.
-
-Once the contract is deployed, you can interact with it by calling the mintTokens, burnToken function, transferTokens and much more.
+For assistance or more information, refer to the OpenZeppelin ERC20 documentation or Ethereum development resources.
 
 ## Authors
 
-Cipher
+- **CIPHER**
 
 ## License
 
-This project is licensed under the GPL - 3.0 License - see the LICENSE.md file for details 
-# Code 
-// SPDX-License-Identifier: GPL - 3.0
-pragma solidity ^0.8.18;
-
-contract MyToken {
-    address public owner;
-    string public tokenName;
-    string public tokenSymbol;
-    uint8 public tokenDecimals;
-    uint256 public tokenTotalSupply;
-
-    // Mapping to store balances of addresses
-    mapping(address => uint256) public balance;
-
-    // Events to log the transactions
-    event Mint(address indexed to, uint256 amount);
-    event Transfer(address indexed from, address indexed to, uint256 amount);
-    event Burn(address indexed from, uint256 amount);
-
-    constructor() {
-        owner = msg.sender;
-        tokenName = "Cipher";
-        tokenSymbol = "Cyp";
-        tokenDecimals = 10;
-        tokenTotalSupply = 0;
-    }
-
-    // Modifier to restrict minting to the contract owner only
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can mint tokens.");
-        _;
-    }
-
-    // Function to mint new tokens
-    function mintTokens(address to, uint256 amount) public onlyOwner {
-        tokenTotalSupply += amount;
-        balance[to] += amount;
-        emit Mint(to, amount);
-    }
-
-    // Function to transfer tokens
-    function transferTokens(address receiver, uint256 amount) public {
-        require(balance[msg.sender] >= amount, "Insufficient balance to transfer tokens.");
-
-        balance[msg.sender] -= amount;
-        balance[receiver] += amount;
-        emit Transfer(msg.sender, receiver, amount);
-    }
-
-    // Function to burn tokens
-    function burnTokens(uint256 amount) public {
-        require(balance[msg.sender] >= amount, "Insufficient balance to burn tokens.");
-
-        tokenTotalSupply -= amount;
-        balance[msg.sender] -= amount;
-        emit Burn(msg.sender, amount);
-    }
-}
-
+This project is licensed under the MIT License.
